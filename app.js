@@ -1,40 +1,34 @@
 const express = require('express')
-const formateDateTime = require('./formateDateTime.js')
+const timestamp = require('./timestamp.js')
+
 const app = express()
 const port = 3000
 
 let timeGettingReq = 0
 
 app.use((req, res, next) => {
+  timestamp(Date(), req, timeGettingReq)
   timeGettingReq = Date.now()
-  const dateTime = formateDateTime(Date(), '-')
-  const reqMethod = req.method
-  const reqUrl = req.originalUrl
-
-  console.log(`${dateTime} | ${reqMethod} from ${reqUrl}`)
   next()
 })
 
 app.get('/', (req, res) => {
-  const timeSendingRes = Date.now()
-  const dateTime = formateDateTime(Date(), '-')
-  const reqMethod = req.method
-  const reqUrl = req.originalUrl
-
-  console.log(`${dateTime} | ${reqMethod} from ${reqUrl} | total time: ${timeSendingRes - timeGettingReq}ms`)
-  timeGettingReq = 0
+  timeGettingReq = timestamp(Date(), req, timeGettingReq)
   res.send('列出全部 Todo')
 })
 
 app.get('/new', (req, res) => {
+  timeGettingReq = timestamp(Date(), req, timeGettingReq)
   res.send('新增 Todo 頁面')
 })
 
 app.get('/:id', (req, res) => {
+  timeGettingReq = timestamp(Date(), req, timeGettingReq)
   res.send('顯示一筆 Todo')
 })
 
 app.post('/', (req, res) => {
+  timeGettingReq = timestamp(Date(), req, timeGettingReq)
   res.send('新增一筆  Todo')
 })
 
