@@ -1,6 +1,16 @@
 const express = require('express')
+const formateDateTime = require('./formateDateTime.js')
 const app = express()
 const port = 3000
+
+app.use((req, res, next) => {
+  const dateTime = formateDateTime(Date(), '-')
+  const reqMethod = req.method
+  const reqUrl = req.originalUrl
+
+  console.log(`${dateTime} | ${reqMethod} from ${reqUrl}`)
+  next()
+})
 
 app.get('/', (req, res) => {
   res.send('列出全部 Todo')
