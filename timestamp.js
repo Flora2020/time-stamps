@@ -1,19 +1,16 @@
 const formateDateTime = require('./formateDateTime.js')
 
-function timestamp(dateTime, req, timeGettingReq) {
-  dateTime = formateDateTime(dateTime, '-')
-  const dateTimeLog = `${dateTime} | ${req.method} from ${req.originalUrl}`
+function timestamp(dateTime, req) {
+  const log = [
+    formateDateTime(dateTime),
+    `${req.method} from ${req.originalUrl}`
+  ]
 
-  const timeSendingRes = Date.now()
-  const totalTime = timeSendingRes - timeGettingReq
-
-  if (timeGettingReq) {
-    console.log(`${dateTimeLog} | total time: ${totalTime}ms`)
-    timeGettingReq = 0
-  } else {
-    console.log(dateTimeLog)
+  if (req.timeGettingReq) {
+    log.push(`total time: ${Date.now() - req.timeGettingReq}ms`)
   }
-  return timeGettingReq
+
+  return log.join(' | ')
 }
 
 module.exports = timestamp
